@@ -147,7 +147,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameFrame.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="battleship-viollet-bigger.png" />
+    <Image Include="bullet-blue.png" />
+    <Image Include="bullet-red.png" />
+    <Image Include="bullet-viollet.png" />
+    <Image Include="ppn.png" />
+    <Image Include="spaceship-viollet.png" />
+    <Image Include="super_papanas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameFrame.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

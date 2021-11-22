@@ -18,5 +18,36 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameFrame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ppn.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="super_papanas.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="bullet-blue.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="battleship-viollet-bigger.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="bullet-viollet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="bullet-red.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="spaceship-viollet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameFrame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
