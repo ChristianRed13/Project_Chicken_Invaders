@@ -1,32 +1,70 @@
 #include "GameFrame.h"
 
+
 void GameFrame::initVariables()
 {
-	window = nullptr;
-	texture.loadFromFile("bullet-red.png");
-	sprite.setTexture(this->texture);
-	//sprite.setScale(5, 5);
+	this->window = nullptr;	
 }
 
 void GameFrame::initWindow()
 {
-	this->videoMode.height = 800;
-	this->videoMode.width = 1000;
+	this->videoMode.height = 900;
+	this->videoMode.width = 1300;
 
 	this->window = new sf::RenderWindow(this->videoMode, "Chicken invadors", sf::Style::Fullscreen);
 	this->window->setFramerateLimit(60);
+	this->player = new Player("Chrboss", this->window->getSize().x / 2 , this->window->getSize().y);
+
+}
+
+void GameFrame::initWorld()
+{
+	if (!this->backgroundTexture.loadFromFile("Textures/Background.png"))
+	{
+		std::cout << "ERROR::GAME::COULD NOT LOAD BACKGROUND TEXTURE" << "\n";
+	}
+
+	this->background.setTexture(this->backgroundTexture);
+}
+
+
+void GameFrame::setTextures()
+{
+	this->textures["BLUE_BULLET"] = new sf::Texture();
+	this->textures["BLUE_BULLET"]->loadFromFile("Textures/bullet-blue.png");
+
+	this->textures["RED_BULLET"] = new sf::Texture();
+	this->textures["RED_BULLET"]->loadFromFile("Textures/bullet-red.png");
+
+	this->textures["VIOLLET_BULLET"] = new sf::Texture();
+	this->textures["VIOLLET_BULLET"]->loadFromFile("Textures/bullet-viollet.png");	
+
 }
 
 //Constructor & Destructor
 GameFrame::GameFrame() 
 {
-	initVariables();
-	initWindow();
+	this->initWorld();
+	this->setTextures();
+	this->initVariables();
+	this->initWindow();
+	
 }
 
 GameFrame::~GameFrame()
 {
-	delete window;
+	delete this->window;
+	delete this->player;
+	for (auto& i : this->textures)
+	{
+		delete i.second;
+	}
+
+	//Delete bullets
+	for (auto* i : this->bullets)
+	{
+		delete i;
+	}
 }
 
 //Getteri Setteri
@@ -37,7 +75,6 @@ const bool GameFrame::getWindowIsOpen() const
 
 void GameFrame::pollEvents()
 {
-	float movementSpeed = 10.f;
 	while (this->window->pollEvent(this->event))
 	{
 		switch (this->event.type)
@@ -55,63 +92,74 @@ void GameFrame::pollEvents()
 					sf::Style::Close);
 				this->window->setFramerateLimit(60);
 			}
-		/*	//ENTER FULLSCREEN
-			if (this->event.key.code == sf::Keyboard::LShift)
-				this->window->create(this->videoMode, "Chicken invadors", sf::Style::Fullscreen);
-
-			//RIGHT BORDER
-			if ((this->event.key.code == sf::Keyboard::D || this->event.key.code == sf::Keyboard::Right)
-				&& this->sprite.getPosition().x + this->sprite.getGlobalBounds().width <= this->window->getSize().x
-				)
-				this->sprite.move(10.f, 0.f);
-
-
-			//DOWN BORDER
-			if ((this->event.key.code == sf::Keyboard::S || this->event.key.code == sf::Keyboard::Down)
-				&& this->sprite.getPosition().y + this->sprite.getGlobalBounds().height <= this->window->getSize().y
-				)
-				this->sprite.move(0.f, 10.f);
-
-			//LEFT BORDER
-			if ((this->event.key.code == sf::Keyboard::A || this->event.key.code == sf::Keyboard::Left)
-				&& this->sprite.getPosition().x >= 0
-				)
-				this->sprite.move(-10.f, 0.f);
-			//UP BORDER
-			if ((this->event.key.code == sf::Keyboard::W || this->event.key.code == sf::Keyboard::Up)
-				&& this->sprite.getPosition().y >= 0
-				)
-				this->sprite.move(0.f, -10.f);
-				*/
 			break;
 		}
 	}
-	//BETER
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		this->sprite.move(-movementSpeed, 0.f);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		this->sprite.move(movementSpeed, 0.f);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		this->sprite.move(0.f, -movementSpeed);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		this->sprite.move(0.f, movementSpeed);
 
-	//Conditii de border
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && this->player->canAtack())
+		this->bullets.push_back(
+			new Projectile(
+				0.f,
+				-1.f,
+				this->player->getPos().x + this->player->getGlobalBounds().width / 2.f - 10.f,
+				this->player->getPos().y,
+				this->textures["RED_BULLET"]
+                          )
+							   );
 
-	if (this->sprite.getPosition().x <= 0)
-		this->sprite.setPosition(0, sprite.getPosition().y);
-	if (this->sprite.getPosition().y <= 0)
-		this->sprite.setPosition(sprite.getPosition().x, 0);
-	if (this->sprite.getPosition().x + this->sprite.getGlobalBounds().width >= this->window->getSize().x)
-		this->sprite.setPosition(this->window->getSize().x - this->sprite.getGlobalBounds().width, sprite.getPosition().y);
-	if (this->sprite.getPosition().y + this->sprite.getGlobalBounds().height >= this->window->getSize().y)
-		this->sprite.setPosition(sprite.getPosition().x, this->window->getSize().y - this->sprite.getGlobalBounds().height);
+
 }
 
 //Functions
+void GameFrame::updateBullets()
+{
+	unsigned counter = 0;
+	for (auto* bullet : this->bullets)
+	{
+		bullet->update();
+
+		if (bullet->getGlobalBounds().top + bullet->getGlobalBounds().height < 0.f)
+		{
+			delete this->bullets.at(counter);
+			this->bullets.erase(this->bullets.begin() + counter);
+			counter--;
+		//	std::cout<<this->bullets.size()<< '\n';
+		}
+
+		counter++;
+	}
+}
+
+void GameFrame::updatePlayer()
+{
+	this->player->update(this->window);
+}
+
 void GameFrame::update()
 {
 	this->pollEvents();
+	this->updatePlayer();
+	this->updateBullets();
+
+}
+
+void GameFrame::renderWorld()
+{
+	this->window->draw(this->background);
+}
+
+
+void GameFrame::renderPlayer()
+{
+	this->player->render(this->window);
+}
+
+void GameFrame::renderBullets()
+{
+	for (auto* bullet : bullets)
+	{
+		bullet->render(this->window);
+	}
 }
 
 void GameFrame::render()
@@ -120,7 +168,14 @@ void GameFrame::render()
 	this->window->clear();
 
 	//draw stuff on window
-	this->window->draw(sprite);
+	this->renderWorld();
+	this->renderBullets();
+	this->renderPlayer();
+	
+
+
 
 	this->window->display();
-} 
+}
+
+

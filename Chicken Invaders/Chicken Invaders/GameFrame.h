@@ -5,19 +5,32 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Network.hpp>
+#include<map>
+
+#include "Player.h"
+#include "Projectile.h"
 
 class GameFrame
 {
 private:
+	sf::Texture backgroundTexture;
+	sf::Sprite background;
+
 	sf::RenderWindow* window;
 	sf::VideoMode videoMode;
 	sf::Event event;
-	sf::Texture texture;
-	sf::Sprite sprite;
-	
 
+	Player* player;	
+	std::map<std::string, sf::Texture*> textures;
+	std::vector<Projectile*> bullets;
+	
+	//Init
 	void initVariables();
 	void initWindow();
+	void initWorld();
+
+	//Data 
+	void setTextures();
 	
 public:
 	//Constructors & Destructors
@@ -29,7 +42,16 @@ public:
 
 	//Functions
 	void pollEvents();
+
+	void updateBullets();
+	void updatePlayer();
 	void update();
+
+
+	void renderWorld();
+	void renderPlayer();
+	void renderBullets();
 	void render();
+
 };
 
