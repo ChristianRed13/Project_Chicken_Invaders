@@ -1,4 +1,15 @@
-﻿  main.cpp
+﻿  GameFrame.cpp
+D:\Anul2 Semestrul1\Programare II\Game\Project_Chicken_Invadors\Chicken Invaders\Chicken Invaders\GameFrame.cpp(18,93): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+D:\Anul2 Semestrul1\Programare II\Game\Project_Chicken_Invadors\Chicken Invaders\Chicken Invaders\GameFrame.cpp(18,65): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+  main.cpp
 D:\Anul2 Semestrul1\Programare II\Game\Project_Chicken_Invadors\Chicken Invaders\Chicken Invaders\main.cpp(15,52): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
@@ -9,4 +20,5 @@ D:\Anul2 Semestrul1\Programare II\Game\Project_Chicken_Invadors\Chicken Invaders
           [
               T=unsigned int
           ]
+  Generating Code...
   Chicken Invaders.vcxproj -> D:\Anul2 Semestrul1\Programare II\Game\Project_Chicken_Invadors\Chicken Invaders\x64\Debug\Chicken Invaders.exe
