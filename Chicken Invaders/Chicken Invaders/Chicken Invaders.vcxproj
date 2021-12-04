@@ -147,13 +147,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameFrame.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameFrame.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
   </ItemGroup>
@@ -163,9 +167,11 @@
     <Image Include="Textures\bullet-blue.png" />
     <Image Include="Textures\bullet-red.png" />
     <Image Include="Textures\bullet-viollet.png" />
+    <Image Include="Textures\exit-button.png" />
     <Image Include="Textures\ppn.png" />
     <Image Include="Textures\space.jpg" />
     <Image Include="Textures\spaceship-viollet.png" />
+    <Image Include="Textures\start-button.png" />
     <Image Include="Textures\super_papanas.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

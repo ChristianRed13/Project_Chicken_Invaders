@@ -42,6 +42,7 @@ public:
 
 	//Functions
 	void pollEvents();
+	void menuEvents();
 
 	void updateBullets();
 	void updatePlayer();

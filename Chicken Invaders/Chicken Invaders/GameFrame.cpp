@@ -4,18 +4,21 @@
 void GameFrame::initVariables()
 {
 	this->window = nullptr;	
+	
 }
 
 void GameFrame::initWindow()
 {
+
 	this->videoMode.height = 900;
 	this->videoMode.width = 1300;
 
 	this->window = new sf::RenderWindow(this->videoMode, "Chicken invadors", sf::Style::Fullscreen);
 	this->window->setFramerateLimit(60);
-	this->player = new Player("Chrboss", this->window->getSize().x / 2 , this->window->getSize().y);
+	this->player = new Player("Chrboss", this->window->getSize().x / 2, this->window->getSize().y);
 
 }
+
 
 void GameFrame::initWorld()
 {
@@ -44,9 +47,10 @@ void GameFrame::setTextures()
 //Constructor & Destructor
 GameFrame::GameFrame() 
 {
-	this->initWorld();
-	this->setTextures();
-	this->initVariables();
+
+	this->initWorld();//background
+	this->setTextures();//seteaza texturile
+	this->initVariables();//
 	this->initWindow();
 	
 }
@@ -82,16 +86,12 @@ void GameFrame::pollEvents()
 		case sf::Event::Closed:
 			this->window->close();
 			break;
+
 		case sf::Event::KeyPressed:
 			//ALL KEYBOARD EVENTS HERE:
 			//EXIT FULLSCREEN
 			if (this->event.key.code == sf::Keyboard::Escape)
-			{
-				this->window->create(this->videoMode, "Chicken invadors",
-					sf::Style::Titlebar |
-					sf::Style::Close);
-				this->window->setFramerateLimit(60);
-			}
+				this->window->close();
 			break;
 		}
 	}
@@ -103,12 +103,12 @@ void GameFrame::pollEvents()
 				-1.f,
 				this->player->getPos().x + this->player->getGlobalBounds().width / 2.f - 10.f,
 				this->player->getPos().y,
-				this->textures["RED_BULLET"]
+				this->textures["BLUE_BULLET"]
                           )
 							   );
 
-
 }
+
 
 //Functions
 void GameFrame::updateBullets()
@@ -129,6 +129,8 @@ void GameFrame::updateBullets()
 		counter++;
 	}
 }
+
+
 
 void GameFrame::updatePlayer()
 {
@@ -161,6 +163,7 @@ void GameFrame::renderBullets()
 		bullet->render(this->window);
 	}
 }
+
 
 void GameFrame::render()
 {

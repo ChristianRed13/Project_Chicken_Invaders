@@ -1,12 +1,12 @@
 #include "Player.h"
 
 
-
 void Player::initVariables()
 {
-	this->atackCooldown = 0.f;
-	this->atackCooldownMax = 10;
-	this->movementSpeed = this->atackCooldownMax;
+	
+	this->atackCooldownMax = 10.f;
+	this->atackCooldown = this->atackCooldownMax;
+	this->movementSpeed = 10.f;
 }
 
 void Player::initTexture() {
@@ -87,6 +87,10 @@ void Player::updateWindowBounds(const sf::RenderTarget* target)
 			this->shape.setPosition(shape.getPosition().x, target->getSize().y - this->shape.getGlobalBounds().height);
 
 }
+//  |y
+//------x
+//  |
+//
 
 void Player::updateInput()
 {
