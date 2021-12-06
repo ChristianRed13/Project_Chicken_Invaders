@@ -47,12 +47,12 @@ void MainMenu::draw(RenderWindow& window)
 
 void MainMenu :: MoveUp()
 {
-    if (MainMenuSelected - 1 >= 0) {
+    if (MainMenuSelected - 1 >= -1) {
         mainMenu[MainMenuSelected].setFillColor(Color::White);
         MainMenuSelected--;
         if (MainMenuSelected == -1) 
         {
-            MainMenuSelected = 2;
+            MainMenuSelected = 3;
         }
         mainMenu[MainMenuSelected].setFillColor(Color::Blue);
     }

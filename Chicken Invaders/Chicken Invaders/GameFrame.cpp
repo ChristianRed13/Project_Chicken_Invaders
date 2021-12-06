@@ -96,7 +96,7 @@ void GameFrame::pollEvents()
 		}
 	}
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->player->canAtack())
+	if ((sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) && this->player->canAtack())
 		this->bullets.push_back(
 			new Projectile(
 				0.f,

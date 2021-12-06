@@ -167,11 +167,9 @@
     <Image Include="Textures\bullet-blue.png" />
     <Image Include="Textures\bullet-red.png" />
     <Image Include="Textures\bullet-viollet.png" />
-    <Image Include="Textures\exit-button.png" />
     <Image Include="Textures\ppn.png" />
     <Image Include="Textures\space.jpg" />
     <Image Include="Textures\spaceship-viollet.png" />
-    <Image Include="Textures\start-button.png" />
     <Image Include="Textures\super_papanas.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

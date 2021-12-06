@@ -71,7 +71,7 @@ const bool Player::canAtack()
 void Player::updateAtackCooldown()
 {
 	if (this->atackCooldown < this->atackCooldownMax)
-		this->atackCooldown += 0.5f;
+		this->atackCooldown += 1.f;
 }
 
 void Player::updateWindowBounds(const sf::RenderTarget* target)

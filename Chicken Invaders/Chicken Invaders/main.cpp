@@ -12,6 +12,7 @@ using namespace sf;
 int main()
 {
 	RenderWindow MENU(VideoMode(960, 720), "Main Menu", Style::Default);
+	MENU.setFramerateLimit(60);
 	MainMenu mainMenu(MENU.getSize().x, MENU.getSize().y);
 	while (MENU.isOpen())
 	{
@@ -24,80 +25,109 @@ int main()
 			}
 			if (event.type == Event::KeyReleased)
 			{
-				if (event.key.code == Keyboard::Up)
+				if (event.key.code == Keyboard::Up || event.key.code == Keyboard::W)
 				{
 					mainMenu.MoveUp();
 					break;
 				}
-				if (event.key.code == Keyboard::Down)
+				if (event.key.code == Keyboard::Down || event.key.code == Keyboard::S)
 				{
 					mainMenu.MoveDown();
 					break;
 				}
 				if (event.key.code == Keyboard::Return) {
-					RenderWindow OPTIONS(VideoMode(960, 720), "OPTIONS");
-					RenderWindow ABOUT(VideoMode(960, 720), "ABOUT");
+					//RenderWindow help(VideoMode(960, 720), "HELP");
+					//RenderWindow about(VideoMode(960, 720), "ABOUT");
 					int x = mainMenu.MainMenuPressed();
 					if (x == 0)
 					{
+						MENU.close();
 						GameFrame gameFrame;
 						while (gameFrame.getWindowIsOpen())
 						{
 							gameFrame.update();
 
-							OPTIONS.clear();
-							ABOUT.close();
+							//help.clear();
+							//about.close();
 							gameFrame.render();
 						}
+						MENU.create(VideoMode(960, 720), "Main Menu", Style::Default);
+						MENU.setFramerateLimit(60);
 					}
 					if (x == 1)
-						while (OPTIONS.isOpen())
+					{
+						MENU.close();
+						RenderWindow help(VideoMode(960, 720), "HELP");
+						Texture help_png;
+						help_png.loadFromFile("Textures/help_menu.png");
+
+						Sprite help_background;
+						help_background.setTexture(help_png);
+						help_background.setScale(3.5f, 3.5f);
+						help_background.setPosition(help.getSize().x / 8, help.getSize().y / 25);
+						
+						while (help.isOpen())
 						{
 							Event aevent;
-							while (OPTIONS.pollEvent(aevent))
+							while (help.pollEvent(aevent))
 							{
 								if (aevent.type == Event::Closed)
 								{
-									OPTIONS.close();
+									help.close();
 								}
 								if (aevent.type == Event::KeyPressed)
 								{
 									if (aevent.key.code == Keyboard::Escape)
 									{
-										OPTIONS.close();
+										help.close();
 									}
 								}
 							}
-					
-							OPTIONS.clear();
-							ABOUT.close();
-							OPTIONS.display();
+
+
+							//about.close();
+							help.clear();
+							help.draw(help_background);
+							help.display();
 						}
+						MENU.create(VideoMode(960, 720), "Main Menu", Style::Default);
+						MENU.setFramerateLimit(60);
+					}
 					if (x == 2)
-						while (ABOUT.isOpen())
+					{
+						MENU.close();
+						RenderWindow about(VideoMode(960, 720), "ABOUT");
+						while (about.isOpen())
 						{
+
 							Event aevent;
-							while (ABOUT.pollEvent(aevent))
+							while (about.pollEvent(aevent))
 							{
 								if (aevent.type == Event::Closed)
 								{
-									ABOUT.close();
+									about.close();
+									
+
 								}
 								if (aevent.type == Event::KeyPressed)
 								{
 									if (aevent.key.code == Keyboard::Escape)
 									{
-										ABOUT.close();
+										about.close();
 									}
 								}
 
 							}
-							
-							OPTIONS.clear();
-							ABOUT.close();
-							OPTIONS.display();
+
+
+							//help.close();
+							about.clear();
+							about.display();
 
 						}
+						MENU.create(VideoMode(960, 720), "Main Menu", Style::Default);
+						MENU.setFramerateLimit(60);
+					}
 					if (x == 3)
 						MENU.close();
 					break;

@@ -79,11 +79,5 @@
     <Image Include="Textures\space.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Textures\exit-button.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\start-button.png">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>
