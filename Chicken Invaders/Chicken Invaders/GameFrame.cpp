@@ -17,6 +17,9 @@ void GameFrame::initWindow()
 	this->window->setFramerateLimit(60);
 	this->player = new Player("Chrboss", this->window->getSize().x / 2, this->window->getSize().y);
 
+	this->background.setScale(this->window->getSize().x / background.getLocalBounds().width,
+		this->window->getSize().y / background.getLocalBounds().height);
+
 }
 
 
@@ -28,6 +31,8 @@ void GameFrame::initWorld()
 	}
 
 	this->background.setTexture(this->backgroundTexture);
+
+
 }
 
 

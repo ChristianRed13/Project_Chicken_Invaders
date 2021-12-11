@@ -11,8 +11,20 @@
 class Player
 {
 private:
+	int maxHP = 4;
+	int hp;
+
 	float atackCooldownMax;
 	float atackCooldown;
+
+	int animationCooldownMax;
+	int animationCooldown;
+
+	sf::Texture powerTexture;
+	sf::Sprite powerShape;
+
+	sf::Texture healthTexture;
+	sf::Sprite healthShape;
 
 	std::string name;
 	sf::Texture texture;
@@ -35,9 +47,13 @@ public:
 
 	const bool canAtack();
 	void updateAtackCooldown();
+	void updateAnimationCooldown();
+	void updateAnimationTexture();
 
 	void updateWindowBounds(const sf::RenderTarget* target);
 	void updateInput();
+	void updateHealthbar();
+	void updatePowerup();
 	void update(const sf::RenderTarget* target);
 	void render(sf::RenderTarget* target);
 

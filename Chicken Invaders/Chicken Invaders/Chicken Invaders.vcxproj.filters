@@ -55,9 +55,6 @@
     <Image Include="Textures\spaceship-viollet.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Textures\battleship-viollet-bigger.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Textures\bullet-blue.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -77,6 +74,51 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\space.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Healthbar-0.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Healthbar-1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Healthbar-2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Healthbar-3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Healthbar-4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\help_menu.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Nuclear Bomb.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Powerup-0.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Powerup-1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Powerup-2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Powerup-3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Powerup-ready.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\space-ship-4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\space-ship-2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\space-ship-3.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
