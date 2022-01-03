@@ -1,18 +1,18 @@
 #pragma once
 
 #include <iostream>
-#include <string>
-#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Network.hpp>
+#include "Projectile.h"
+//BETTER FOR COMPILER
+class string;
+class sf::RenderTarget;
 
 class Player
 {
 private:
 	int maxHP = 4;
-	int hp;
+	
 
 	float atackCooldownMax;
 	float atackCooldown;
@@ -36,7 +36,7 @@ private:
 	void initShape();
 
 public:
-
+	int hp;
 	Player(std::string name , float x , float y );
 	Player();
 	Player(const Player& player);
@@ -44,6 +44,8 @@ public:
 	
 	const sf::Vector2f getPos() const;
 	const sf::FloatRect getGlobalBounds() const;
+
+	void setHp(int dmg);
 
 	const bool canAtack();
 	void updateAtackCooldown();

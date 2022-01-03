@@ -1,4 +1,6 @@
 #include <iostream>
+#include<fstream>
+#include<ios>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
@@ -6,6 +8,7 @@
 #include <SFML/Network.hpp>
 #include "GameFrame.h"
 #include "MainMenu.h"
+#include "NewGame.h"
 
 using namespace sf;
 
@@ -41,15 +44,26 @@ int main()
 					int x = mainMenu.MainMenuPressed();
 					if (x == 0)
 					{
-						MENU.close();
-						GameFrame gameFrame;
-						while (gameFrame.getWindowIsOpen())
+						MENU.close();MENU.close();
+						NewGame newGame(960, 720);
+						while (newGame.getWindowIsOpen())
 						{
-							gameFrame.update();
+							newGame.update();
 
-							//help.clear();
-							//about.close();
-							gameFrame.render();
+							newGame.render();
+						}
+						if (newGame.isUserFieldCompleted() == false && newGame.getEvent().key.code != sf::Keyboard::Escape) {
+							GameFrame gameFrame(newGame.getUser());
+							while (gameFrame.getWindowIsOpen())
+							{
+								gameFrame.update();
+
+								//if hp == 0 -> window.close()
+								gameFrame.render();
+							}
+							std::ofstream scores("Hall-Of-Fame.txt", std::ios_base::app | std::ios_base::out);
+							scores << gameFrame.getPlayerName() << ":" << gameFrame.getScore() << endl;
+							scores.close();
 						}
 						MENU.create(VideoMode(960, 720), "Main Menu", Style::Default);
 						MENU.setFramerateLimit(60);
@@ -58,6 +72,7 @@ int main()
 					{
 						MENU.close();
 						RenderWindow help(VideoMode(960, 720), "HELP");
+						help.setFramerateLimit(60);
 						Texture help_png;
 						help_png.loadFromFile("Textures/help_menu.png");
 
@@ -96,9 +111,24 @@ int main()
 					if (x == 2)
 					{
 						MENU.close();
-						RenderWindow about(VideoMode(960, 720), "ABOUT");
+						sf::Font font;
+						font.loadFromFile("Fonts/PressStart2P-Regular.ttf");
+						std::string text;
+						ifstream scores;
+						scores.open("Hall-Of-Fame.txt");
+						std::string line;
+						while (std::getline(scores, line))
+							text.append( line + "\n");
+
+						sf::Text showTxt(text, font);
+						showTxt.setFillColor(sf::Color::White);
+						showTxt.setPosition(380, 150);
+						RenderWindow about(VideoMode(960, 720), "Scores");
+						about.setFramerateLimit(60);
+
 						while (about.isOpen())
 						{
+
 
 							Event aevent;
 							while (about.pollEvent(aevent))
@@ -116,12 +146,22 @@ int main()
 										about.close();
 									}
 								}
+								if (event.type == sf::Event::MouseWheelMoved)
+								{
+									//Scroll for all 
+									std::cout << "wheel movement: " << event.mouseWheel.delta << std::endl;
+									std::cout << "mouse x: " << event.mouseWheel.x << std::endl;
+									std::cout << "mouse y: " << event.mouseWheel.y << std::endl;
+								}
 
 							}
 
 
 							//help.close();
 							about.clear();
+
+							about.draw(showTxt);
+
 							about.display();
 
 						}

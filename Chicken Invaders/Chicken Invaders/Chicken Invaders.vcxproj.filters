@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameFrame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -31,6 +28,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MainMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NewGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,6 +56,12 @@
     <ClInclude Include="MainMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NewGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\spaceship-viollet.png">
@@ -64,16 +76,7 @@
     <Image Include="Textures\bullet-viollet.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Textures\ppn.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\super_papanas.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Textures\Background.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Textures\space.jpg">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\Healthbar-0.png">
@@ -121,5 +124,31 @@
     <Image Include="Textures\space-ship-3.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\enemy-1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\green-double-bullet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\yellow-triple-bullet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Chicken-enemy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\christmas-egg.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\enemy-animation.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\spaceship-animation.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Hall-Of-Fame.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

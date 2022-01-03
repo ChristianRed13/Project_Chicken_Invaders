@@ -1,18 +1,26 @@
 #pragma once
 
-#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
-#include <SFML/Network.hpp>
 #include<map>
 
 #include "Player.h"
 #include "Projectile.h"
+#include "Enemy.h"
 
 class GameFrame
 {
 private:
+
+	//enemy
+	float spawnTime;
+	float spawnTimeMax;
+
+
+	int score;
+	std::string playerName;
+
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
 
@@ -23,6 +31,8 @@ private:
 	Player* player;	
 	std::map<std::string, sf::Texture*> textures;
 	std::vector<Projectile*> bullets;
+	std::vector<Projectile*> eggs;
+	std::vector<Enemy*> enemies;
 	
 	//Init
 	void initVariables();
@@ -34,16 +44,19 @@ private:
 	
 public:
 	//Constructors & Destructors
-	GameFrame();
+	GameFrame(std::string userName);
 	virtual ~GameFrame();
+	int getScore();
 
 	//Getteri Setteri
 	const bool getWindowIsOpen() const;
+	std::string getPlayerName();
 
 	//Functions
 	void pollEvents();
 	
-
+	void updateEggs();
+	void updateEnemies();
 	void updateBullets();
 	void updatePlayer();
 	void update();
@@ -52,6 +65,8 @@ public:
 	void renderWorld();
 	void renderPlayer();
 	void renderBullets();
+	void renderEggs();
+	void renderEnemies();
 	void render();
 
 };

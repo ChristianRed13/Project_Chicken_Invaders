@@ -147,17 +147,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameFrame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="NewGame.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameFrame.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="NewGame.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
   </ItemGroup>
@@ -166,6 +170,11 @@
     <Image Include="Textures\bullet-blue.png" />
     <Image Include="Textures\bullet-red.png" />
     <Image Include="Textures\bullet-viollet.png" />
+    <Image Include="Textures\Chicken-enemy.png" />
+    <Image Include="Textures\christmas-egg.png" />
+    <Image Include="Textures\enemy-1.png" />
+    <Image Include="Textures\enemy-animation.png" />
+    <Image Include="Textures\green-double-bullet.png" />
     <Image Include="Textures\Healthbar-0.png" />
     <Image Include="Textures\Healthbar-1.png" />
     <Image Include="Textures\Healthbar-2.png" />
@@ -178,13 +187,15 @@
     <Image Include="Textures\Powerup-2.png" />
     <Image Include="Textures\Powerup-3.png" />
     <Image Include="Textures\Powerup-ready.png" />
-    <Image Include="Textures\ppn.png" />
     <Image Include="Textures\space-ship-2.png" />
     <Image Include="Textures\space-ship-3.png" />
     <Image Include="Textures\space-ship-4.png" />
-    <Image Include="Textures\space.jpg" />
+    <Image Include="Textures\spaceship-animation.png" />
     <Image Include="Textures\spaceship-viollet.png" />
-    <Image Include="Textures\super_papanas.png" />
+    <Image Include="Textures\yellow-triple-bullet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Hall-Of-Fame.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,10 +1,13 @@
 #include "GameFrame.h"
+#include<string>
 
 
 void GameFrame::initVariables()
 {
+	this->spawnTimeMax = 50.f;
+	this->spawnTime = 0.f;
 	this->window = nullptr;	
-	
+	this->score = 0;
 }
 
 void GameFrame::initWindow()
@@ -13,9 +16,10 @@ void GameFrame::initWindow()
 	this->videoMode.height = 900;
 	this->videoMode.width = 1300;
 
+	
 	this->window = new sf::RenderWindow(this->videoMode, "Chicken invadors", sf::Style::Fullscreen);
 	this->window->setFramerateLimit(60);
-	this->player = new Player("Chrboss", this->window->getSize().x / 2, this->window->getSize().y);
+	this->player = new Player(this->playerName, this->window->getSize().x / 2, this->window->getSize().y);
 
 	this->background.setScale(this->window->getSize().x / background.getLocalBounds().width,
 		this->window->getSize().y / background.getLocalBounds().height);
@@ -32,7 +36,6 @@ void GameFrame::initWorld()
 
 	this->background.setTexture(this->backgroundTexture);
 
-
 }
 
 
@@ -47,12 +50,21 @@ void GameFrame::setTextures()
 	this->textures["VIOLLET_BULLET"] = new sf::Texture();
 	this->textures["VIOLLET_BULLET"]->loadFromFile("Textures/bullet-viollet.png");	
 
+	this->textures["GREEN_BULLET"] = new sf::Texture();
+	this->textures["GREEN_BULLET"]->loadFromFile("Textures/green-double-bullet.png");
+
+	this->textures["YELLOW_BULLET"] = new sf::Texture();
+	this->textures["YELLOW_BULLET"]->loadFromFile("Textures/yellow-triple-bullet.png");
+
+	this->textures["EGG"] = new sf::Texture();
+	this->textures["EGG"]->loadFromFile("Textures/christmas-egg.png");
+
 }
 
 //Constructor & Destructor
-GameFrame::GameFrame() 
+GameFrame::GameFrame(std::string userName) 
 {
-
+	this->playerName = userName;
 	this->initWorld();//background
 	this->setTextures();//seteaza texturile
 	this->initVariables();//
@@ -70,7 +82,13 @@ GameFrame::~GameFrame()
 	}
 
 	//Delete bullets
-	for (auto* i : this->bullets)
+	for (auto& i : this->bullets)
+	{
+		delete i;
+	}
+
+	//Delete enemies
+	for (auto& i : this->enemies)
 	{
 		delete i;
 	}
@@ -101,17 +119,87 @@ void GameFrame::pollEvents()
 		}
 	}
 
+//spaceship atack
 	if ((sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) && this->player->canAtack())
 		this->bullets.push_back(
 			new Projectile(
 				0.f,
 				-1.f,
-				this->player->getPos().x + this->player->getGlobalBounds().width / 2.f - 10.f,
+				this->player->getPos().x + this->player->getGlobalBounds().width / 2.f - this->textures["YELLOW_BULLET"]->getSize().x,
 				this->player->getPos().y,
-				this->textures["BLUE_BULLET"]
+				1,
+				this->textures["YELLOW_BULLET"]
                           )
 							   );
+//enemy spawner
+	if (this->spawnTime == this->spawnTimeMax)
+	{
+		this->spawnTime = 0;
+		
+		this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, 20.f));
+		
+	}
+	else
+		this->spawnTime++;
 
+}
+
+void GameFrame::updateEggs() {
+
+	unsigned counter = 0;
+	if (player->hp > 0)
+		for (auto* egg : this->eggs)
+		{
+			egg->update();
+
+			if (player->getGlobalBounds().intersects(egg->getGlobalBounds()))
+			{
+				player->setHp(egg->getDamage());
+				delete this->eggs.at(counter);
+				this->eggs.erase(this->eggs.begin() + counter);
+				counter--;
+			}
+
+			counter++;
+		}
+	
+}
+
+void GameFrame::updateEnemies()
+{
+	unsigned counter = 0;
+	for (auto* enemy : this->enemies)
+	{
+		if (enemy->getHp() > 0)
+		{
+			enemy->update(this->window);
+			if (enemy->canAtack())
+				this->eggs.push_back(
+				new Projectile(
+					0.f,
+					1.f,
+					enemy->getPos().x + enemy->getGlobalBounds().width / 2.f - this->textures["EGG"]->getSize().x,
+					enemy->getPos().y + enemy->getGlobalBounds().height,
+					1,
+					this->textures["EGG"]
+				)
+			);
+		}
+		else
+		{
+			delete this->enemies.at(counter);
+			this->enemies.erase(this->enemies.begin() + counter);
+			counter--;
+			score += 10;
+		}
+
+		counter++;
+	}
+}
+
+std::string GameFrame::getPlayerName()
+{
+	return std::string(this->playerName);
 }
 
 
@@ -123,13 +211,27 @@ void GameFrame::updateBullets()
 	{
 		bullet->update();
 
-		if (bullet->getGlobalBounds().top + bullet->getGlobalBounds().height < 0.f)
+		if (!enemies.empty())
+		{
+			for (auto* enemy : this->enemies)
+			{
+				if (enemy->getGlobalBounds().intersects(bullet->getGlobalBounds()))
+				{
+					enemy->updateHp(bullet->getDamage());
+					delete this->bullets.at(counter);
+					this->bullets.erase(this->bullets.begin() + counter);
+					counter--;
+				}
+			}
+		}
+		else if (bullet->getGlobalBounds().top + bullet->getGlobalBounds().height < 0.f)
 		{
 			delete this->bullets.at(counter);
 			this->bullets.erase(this->bullets.begin() + counter);
 			counter--;
 		//	std::cout<<this->bullets.size()<< '\n';
 		}
+	
 
 		counter++;
 	}
@@ -144,8 +246,11 @@ void GameFrame::updatePlayer()
 
 void GameFrame::update()
 {
+	
 	this->pollEvents();
+	this->updateEggs();
 	this->updatePlayer();
+	this->updateEnemies();
 	this->updateBullets();
 
 }
@@ -153,12 +258,18 @@ void GameFrame::update()
 void GameFrame::renderWorld()
 {
 	this->window->draw(this->background);
+	
 }
 
 
 void GameFrame::renderPlayer()
 {
 	this->player->render(this->window);
+}
+
+int GameFrame::getScore()
+{
+	return this->score;
 }
 
 void GameFrame::renderBullets()
@@ -169,6 +280,22 @@ void GameFrame::renderBullets()
 	}
 }
 
+void GameFrame::renderEnemies()
+{
+	for (auto* enemy : enemies)
+	{
+			enemy->render(this->window);
+	}
+}
+
+void GameFrame::renderEggs()
+{
+	if (player->hp > 0)
+		for (auto* egg : eggs)
+		{
+			egg->render(this->window);
+		}
+}
 
 void GameFrame::render()
 {
@@ -178,10 +305,9 @@ void GameFrame::render()
 	//draw stuff on window
 	this->renderWorld();
 	this->renderBullets();
+	this->renderEnemies();
+	this->renderEggs();
 	this->renderPlayer();
-	
-
-
 
 	this->window->display();
 }

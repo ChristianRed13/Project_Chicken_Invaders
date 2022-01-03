@@ -1,4 +1,7 @@
 #include "Player.h"
+#include <string>
+#include <SFML/Window.hpp>
+
 
 
 void Player::initVariables()
@@ -8,7 +11,7 @@ void Player::initVariables()
 	this->atackCooldownMax = 10.f;
 	this->atackCooldown = this->atackCooldownMax;
 
-	this->animationCooldownMax = 12;
+	this->animationCooldownMax = 20;
 	this->animationCooldown = this->animationCooldownMax;
 
 	this->movementSpeed = 10.f;
@@ -18,10 +21,10 @@ void Player::initTexture() {
 	if (!this->texture.loadFromFile("Textures/spaceship-viollet.png"))
 		std::cout << "Texture Ship not found!";
 	
-	if (!this->healthTexture.loadFromFile("Textures/Healthbar-2.png"))
+	if (!this->healthTexture.loadFromFile("Textures/Healthbar-4.png"))
 		std::cout << "Texture Health not found!";
 
-	if (!this->powerTexture.loadFromFile("Textures/Powerup-3.png"))
+	if (!this->powerTexture.loadFromFile("Textures/Powerup-0.png"))
 		std::cout << "Texture Power not found!";
 
 	
@@ -111,13 +114,13 @@ void Player::updateAnimationTexture()
 	case 0:
 		this->texture.loadFromFile("Textures/spaceship-viollet.png");
 		break;
-	case 3:
+	case 5:
 		this->texture.loadFromFile("Textures/space-ship-2.png");
 		break;
-	case 6:
+	case 10:
 		this->texture.loadFromFile("Textures/space-ship-3.png");
 		break;
-	case 9:
+	case 15:
 		this->texture.loadFromFile("Textures/space-ship-4.png");
 		break;
 	}
@@ -176,6 +179,11 @@ void Player::updateHealthbar()
 	}
 }
 
+void Player::setHp(int dmg)
+{
+	this->hp -= dmg;
+}
+
 void Player::updatePowerup()
 {
 	//powerup cooldown 
@@ -190,7 +198,7 @@ void Player::update(const sf::RenderTarget* target)
 	this->updateWindowBounds(target);
 	this->updateInput();
 	this->updatePowerup();
-	//this->updateHealthbar();
+	this->updateHealthbar();
 }
 
 void Player::render(sf::RenderTarget* target)
