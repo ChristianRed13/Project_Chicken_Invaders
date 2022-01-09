@@ -180,7 +180,6 @@ void GameFrame::updateEggs() {
 				delete this->eggs.at(counter);
 				this->eggs.erase(this->eggs.begin() + counter);
 				counter--;
-				std::cout << "Deleted";
 			}
 
 			counter++;
