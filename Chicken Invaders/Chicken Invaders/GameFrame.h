@@ -14,12 +14,17 @@ class GameFrame
 private:
 
 	//enemy
+	float switchLevel;
+	bool spawnModif;
 	float spawnTime;
 	float spawnTimeMax;
 
 
 	int score;
+	sf::Text scoreT;
+	sf::Font scoreF;
 	std::string playerName;
+	std::string bulletType;
 
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
@@ -29,12 +34,21 @@ private:
 	sf::Event event;
 
 	Player* player;	
-	std::map<std::string, sf::Texture*> textures;
 	std::vector<Projectile*> bullets;
-	std::vector<Projectile*> eggs;
+	sf::Sound laserSound;
+	sf::SoundBuffer laserSoundBuffer;
+
 	std::vector<Enemy*> enemies;
-	
+	std::vector<Projectile*> eggs;
+	sf::Sound egg_crackSound;
+	sf::SoundBuffer egg_crackSoundBuffer;
+
+
+
+
+	std::map<std::string, sf::Texture*> textures;
 	//Init
+	void initSound();
 	void initVariables();
 	void initWindow();
 	void initWorld();
@@ -54,6 +68,9 @@ public:
 
 	//Functions
 	void pollEvents();
+	void levelMaker();
+	void spawnEnemies();
+	void gameOver();
 	
 	void updateEggs();
 	void updateEnemies();

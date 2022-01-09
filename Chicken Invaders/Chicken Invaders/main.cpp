@@ -1,6 +1,7 @@
 #include <iostream>
 #include<fstream>
 #include<ios>
+#include<map>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
@@ -11,6 +12,36 @@
 #include "NewGame.h"
 
 using namespace sf;
+
+bool cmp(pair<std::string, int>& a,
+	pair<std::string, int>& b)
+{
+	return a.second > b.second;
+}
+
+std::string sort(std::map<std::string, int> &M)
+{
+	int repeat = 0;
+	std::string text;
+
+	// Declare vector of pairs
+	vector<pair<std::string, int> > A;
+
+	// Copy key-value pair from Map
+	// to vector of pairs
+	for (auto& it : M) {
+		A.push_back(it);
+	}
+	// Sort using comparator function
+	sort(A.begin(), A.end(), cmp);
+
+	for (size_t i = 0; i < A.size() && repeat <= 10; i++)
+	{
+		text += A[i].first + std::to_string(A[i].second) + "\n";
+	}
+	
+	return text;
+}
 
 int main()
 {
@@ -62,7 +93,7 @@ int main()
 								gameFrame.render();
 							}
 							std::ofstream scores("Hall-Of-Fame.txt", std::ios_base::app | std::ios_base::out);
-							scores << gameFrame.getPlayerName() << ":" << gameFrame.getScore() << endl;
+							scores << gameFrame.getPlayerName() << ": " << gameFrame.getScore() << endl;
 							scores.close();
 						}
 						MENU.create(VideoMode(960, 720), "Main Menu", Style::Default);
@@ -111,58 +142,54 @@ int main()
 					if (x == 2)
 					{
 						MENU.close();
+
 						sf::Font font;
 						font.loadFromFile("Fonts/PressStart2P-Regular.ttf");
+						std::string finalText;
+
+						
+						std::map< std::string, int > name_score;
 						std::string text;
+						int value;
+
 						ifstream scores;
 						scores.open("Hall-Of-Fame.txt");
 						std::string line;
-						while (std::getline(scores, line))
-							text.append( line + "\n");
+						while (scores >> text >> value)
+							name_score[text] = value;
+						
 
-						sf::Text showTxt(text, font);
+						finalText = sort(name_score);
+
+						sf::Text showTxt(finalText, font);
 						showTxt.setFillColor(sf::Color::White);
-						showTxt.setPosition(380, 150);
-						RenderWindow about(VideoMode(960, 720), "Scores");
-						about.setFramerateLimit(60);
+						showTxt.setPosition(370, 150);
+						RenderWindow hell_of_fame(VideoMode(960, 720), "Scores");
+						hell_of_fame.setFramerateLimit(60);
 
-						while (about.isOpen())
+						while (hell_of_fame.isOpen())
 						{
 
 
 							Event aevent;
-							while (about.pollEvent(aevent))
+							while (hell_of_fame.pollEvent(aevent))
 							{
 								if (aevent.type == Event::Closed)
-								{
-									about.close();
-									
+									hell_of_fame.close();
 
-								}
 								if (aevent.type == Event::KeyPressed)
-								{
 									if (aevent.key.code == Keyboard::Escape)
-									{
-										about.close();
-									}
-								}
-								if (event.type == sf::Event::MouseWheelMoved)
-								{
-									//Scroll for all 
-									std::cout << "wheel movement: " << event.mouseWheel.delta << std::endl;
-									std::cout << "mouse x: " << event.mouseWheel.x << std::endl;
-									std::cout << "mouse y: " << event.mouseWheel.y << std::endl;
-								}
+										hell_of_fame.close();
 
 							}
 
 
 							//help.close();
-							about.clear();
+							hell_of_fame.clear();
 
-							about.draw(showTxt);
+							hell_of_fame.draw(showTxt);
 
-							about.display();
+							hell_of_fame.display();
 
 						}
 						MENU.create(VideoMode(960, 720), "Main Menu", Style::Default);

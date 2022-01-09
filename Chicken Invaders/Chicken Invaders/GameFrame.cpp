@@ -4,10 +4,27 @@
 
 void GameFrame::initVariables()
 {
-	this->spawnTimeMax = 50.f;
+	this->switchLevel = 0;
+	this->spawnTimeMax = 80.f;
 	this->spawnTime = 0.f;
 	this->window = nullptr;	
 	this->score = 0;
+	this->scoreF.loadFromFile("Fonts/PressStart2P-Regular.ttf");
+	this->scoreT = sf::Text(std::to_string(this->score) ,this->scoreF);
+	this->spawnModif = true;
+	this->bulletType = "BLUE_BULLET";
+
+}
+
+void GameFrame::initSound()
+{
+	this->laserSoundBuffer.loadFromFile("Sounds/Laser.wav");
+	this->laserSound = sf::Sound(laserSoundBuffer);
+
+	this->egg_crackSoundBuffer.loadFromFile("Sounds/Egg-crack.ogg");
+	this->egg_crackSound = sf::Sound(egg_crackSoundBuffer);
+
+
 }
 
 void GameFrame::initWindow()
@@ -23,6 +40,7 @@ void GameFrame::initWindow()
 
 	this->background.setScale(this->window->getSize().x / background.getLocalBounds().width,
 		this->window->getSize().y / background.getLocalBounds().height);
+	this->scoreT.setPosition(this->window->getSize().x - this->scoreT.getGlobalBounds().width, 10);
 
 }
 
@@ -35,6 +53,8 @@ void GameFrame::initWorld()
 	}
 
 	this->background.setTexture(this->backgroundTexture);
+
+
 
 }
 
@@ -69,6 +89,7 @@ GameFrame::GameFrame(std::string userName)
 	this->setTextures();//seteaza texturile
 	this->initVariables();//
 	this->initWindow();
+	this->initSound();
 	
 }
 
@@ -121,53 +142,57 @@ void GameFrame::pollEvents()
 
 //spaceship atack
 	if ((sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) && this->player->canAtack())
+	{
+		this->laserSound.play();
 		this->bullets.push_back(
 			new Projectile(
 				0.f,
 				-1.f,
-				this->player->getPos().x + this->player->getGlobalBounds().width / 2.f - this->textures["YELLOW_BULLET"]->getSize().x,
+				this->player->getPos().x + this->player->getGlobalBounds().width / 2.f - this->textures[this->bulletType]->getSize().x,
 				this->player->getPos().y,
 				1,
-				this->textures["YELLOW_BULLET"]
-                          )
-							   );
-//enemy spawner
-	if (this->spawnTime == this->spawnTimeMax)
-	{
-		this->spawnTime = 0;
-		
-		this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, 20.f));
-		
+				this->textures[this->bulletType]
+			)
+		);
 	}
-	else
-		this->spawnTime++;
+
 
 }
 
 void GameFrame::updateEggs() {
 
 	unsigned counter = 0;
-	if (player->hp > 0)
+
 		for (auto* egg : this->eggs)
 		{
 			egg->update();
 
 			if (player->getGlobalBounds().intersects(egg->getGlobalBounds()))
 			{
+				this->egg_crackSound.play();
 				player->setHp(egg->getDamage());
 				delete this->eggs.at(counter);
 				this->eggs.erase(this->eggs.begin() + counter);
 				counter--;
 			}
+			else if (egg->getShapePosition().y > this->window->getSize().y)
+			{
+				delete this->eggs.at(counter);
+				this->eggs.erase(this->eggs.begin() + counter);
+				counter--;
+				std::cout << "Deleted";
+			}
 
 			counter++;
 		}
+
 	
 }
 
 void GameFrame::updateEnemies()
 {
 	unsigned counter = 0;
+	
 	for (auto* enemy : this->enemies)
 	{
 		if (enemy->getHp() > 0)
@@ -191,11 +216,17 @@ void GameFrame::updateEnemies()
 			this->enemies.erase(this->enemies.begin() + counter);
 			counter--;
 			score += 10;
+			this->scoreT.setString(std::to_string(this->score));
+			this->scoreT.setPosition(this->window->getSize().x - this->scoreT.getGlobalBounds().width - 5, 10);
 		}
 
 		counter++;
 	}
+
 }
+	
+
+
 
 std::string GameFrame::getPlayerName()
 {
@@ -207,6 +238,7 @@ std::string GameFrame::getPlayerName()
 void GameFrame::updateBullets()
 {
 	unsigned counter = 0;
+	
 	for (auto* bullet : this->bullets)
 	{
 		bullet->update();
@@ -239,6 +271,7 @@ void GameFrame::updateBullets()
 
 
 
+
 void GameFrame::updatePlayer()
 {
 	this->player->update(this->window);
@@ -246,18 +279,22 @@ void GameFrame::updatePlayer()
 
 void GameFrame::update()
 {
-	
 	this->pollEvents();
-	this->updateEggs();
-	this->updatePlayer();
-	this->updateEnemies();
-	this->updateBullets();
-
+	if (player->hp > 0)
+	{
+		this->spawnEnemies();
+		this->levelMaker();
+		this->updateEggs();
+		this->updatePlayer();
+		this->updateEnemies();
+		this->updateBullets();
+	}
 }
 
 void GameFrame::renderWorld()
 {
 	this->window->draw(this->background);
+	this->window->draw(this->scoreT);
 	
 }
 
@@ -297,17 +334,102 @@ void GameFrame::renderEggs()
 		}
 }
 
+void GameFrame::levelMaker()
+{
+	if (this->spawnModif)
+		switch (this->score)
+		{
+		case 100:
+			this->spawnTimeMax -= 5.f;
+			this->spawnModif = false;
+			break;
+		case 200:
+			this->spawnTimeMax -= 5.f;
+			this->spawnModif = false;
+			this->bulletType = "GREEN_BULLET";
+			break;
+		case 300:
+			this->spawnTimeMax -= 5.f;
+			this->spawnModif = false;
+			break;
+		case 500:
+			this->spawnTimeMax -= 5.f;
+			this->spawnModif = false;
+			this->bulletType = "YELLOW_BULLET";
+			break;
+		case 600:
+			this->spawnTimeMax -= 5.f;
+			this->spawnModif = false;
+			break;
+		case 700:
+			this->spawnTimeMax -= 5.f;
+			this->spawnModif = false;
+			this->bulletType = "RED_BULLET";
+			break;
+		case 800:
+			this->spawnTimeMax -= 5.f;
+			this->spawnModif = false;
+			break;
+		case 900:
+			this->spawnTimeMax -= 5.f;
+			this->spawnModif = false;
+			break;
+		case 1000:
+			this->spawnTimeMax -= 5.f;
+			this->spawnModif = false;
+			this->bulletType = "RED_BULLET";
+			break;
+		}
+
+	if (this->switchLevel > 20)
+	{
+		this->switchLevel = 0;
+		this->spawnModif = true;
+	}
+	else
+		this->switchLevel++;
+
+}
+
+void GameFrame::spawnEnemies()
+{
+	//enemy spawner
+
+	if (this->spawnTime > this->spawnTimeMax)
+	{
+		this->spawnTime = 0.f;
+		this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, 20.f));
+
+	}
+	else
+		this->spawnTime++;
+}
+
+void GameFrame::gameOver()
+{
+	if (this->player->hp == 0)
+	{
+		sf::Text gameOverText("~GAME OVER~", this->scoreF);
+		gameOverText.setFillColor(sf::Color::White);
+		gameOverText.setCharacterSize(60);
+		gameOverText.setPosition(this->window->getSize().x / 2 - gameOverText.getGlobalBounds().width / 2, this->window->getSize().y / 2 - gameOverText.getCharacterSize());
+		this->window->draw(gameOverText);
+	}
+}
+
 void GameFrame::render()
 {
 
 	this->window->clear();
 
-	//draw stuff on window
-	this->renderWorld();
-	this->renderBullets();
-	this->renderEnemies();
-	this->renderEggs();
-	this->renderPlayer();
+		
+		this->renderWorld();
+		this->renderBullets();
+		this->renderEnemies();
+		this->renderEggs();
+		this->renderPlayer();
+		this->gameOver();
+
 
 	this->window->display();
 }
